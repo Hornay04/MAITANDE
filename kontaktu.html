@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MAITANDE – Kontaktu</title>
+  <style>
+    body{ margin:0; font-family:Arial, Helvetica, sans-serif; background:#f4f6f8; color:#333; }
+    header{ background:#0a3d62; color:#fff; padding:20px; display:flex; align-items:center; justify-content:space-between; }
+    .logo{ display:flex; align-items:center; gap:10px; font-weight:bold; font-size:22px; }
+    nav a{ color:#fff; margin-left:15px; text-decoration:none; font-weight:500; }
+    nav a:hover{ text-decoration:underline; }
+    select{ padding:6px 10px; border-radius:8px; }
+    .section{ padding:40px 20px; max-width:800px; margin:auto; background:#fff; border-radius:12px; box-shadow:0 4px 15px rgba(0,0,0,0.1); margin-top:40px; }
+    #contactInfo p{ margin:10px 0; line-height:1.6; }
+    #contactInfo h2{ margin-bottom:20px; color:#0a3d62; }
+    .contact-button{ display:inline-block; margin:5px 0; padding:10px 20px; background:#0a3d62; color:#fff; border:none; border-radius:8px; text-decoration:none; font-weight:bold; }
+    .contact-button:hover{ background:#072b46; }
+  </style>
+</head>
+<body>
+
+<header>
+ 
+  <nav>
+    <a href="index.html" data-i18n="home">Uma</a>
+    <a href="aprende.html" data-i18n="learn">Aprende </a>
+    <a href="kontaktu.html" data-i18n="contact">Kontaktu</a>
+    <select id="langSwitcher">
+      <option value="tet">Tetun</option>
+      <option value="id">Indonesia</option>
+      <option value="en">English</option>
+    </select>
+  </nav>
+</header>
+
+<section class="section" id="contactInfo">
+  <h2 data-i18n="contactTitle">Kontak Profesional</h2>
+  <p data-i18n="contactMessage">Untuk kerjasama, penerbitan artikel, atau pertanyaan profesional lainnya, silakan hubungi kami melalui:</p>
+  <a class="contact-button" href="https://wa.me/74999806" target="_blank">WhatsApp</a>
+  <a class="contact-button" href="mailto:rezohornay@gmail.com">Email</a>
+</section>
+
+<script>
+  const content = {
+    tet:{ home:'Home', learn:'Aprende', contact:'Kontaktu', contactTitle:'Kontaktu Profesional', contactMessage:'Hodi ita-husi kolaborasaun, publikasão artigu ka buat pertuntu profesional sira, favor kontaktu ami liu husi:' },
+    id:{ home:'Beranda', learn:'Belajar', contact:'Kontak', contactTitle:'Kontak Profesional', contactMessage:'Untuk kerjasama, penerbitan artikel, atau pertanyaan profesional lainnya, silakan hubungi kami melalui:' },
+    en:{ home:'Home', learn:'Learn', contact:'Contact', contactTitle:'Professional Contact', contactMessage:'For collaboration, article publication, or professional inquiries, please contact us via:' }
+  };
+
+  const langSwitcher = document.getElementById('langSwitcher');
+  langSwitcher.addEventListener('change',()=>{
+    const lang = langSwitcher.value;
+    document.querySelectorAll('[data-i18n]').forEach(el=> el.textContent=content[lang][el.dataset.i18n]);
+  });
+</script>
+
+</body>
+</html>

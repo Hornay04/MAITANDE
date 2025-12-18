@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MAITANDE – Edukasi Timor-Leste</title>
+  <style>
+    body{ margin:0; font-family:Arial, Helvetica, sans-serif; background:#f4f6f8; color:#333; }
+    header{ background:#0a3d62; color:#fff; padding:20px; display:flex; align-items:center; justify-content:space-between; }
+    .logo{ display:flex; align-items:center; gap:10px; font-weight:bold; font-size:22px; }
+    nav a{ color:#fff; margin-left:15px; text-decoration:none; font-weight:500; }
+    nav a:hover{ text-decoration:underline; }
+    .hero{ padding:60px 20px; text-align:center; background:linear-gradient(135deg,#0a3d62,#3c6382); color:#fff; }
+    .hero h1{ font-size:36px; margin-bottom:10px; }
+    .hero p{ max-width:600px; margin:auto; }
+    .section{ padding:40px 20px; max-width:1100px; margin:auto; }
+    .cards{ display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); gap:20px; }
+    .card{ background:#fff; padding:20px; border-radius:12px; box-shadow:0 4px 10px rgba(0,0,0,0.08); }
+    footer{ background:#0a3d62; color:#fff; text-align:center; padding:20px; margin-top:40px; }
+  </style>
+</head>
+<body>
+
+<header>
+  
+  <nav>
+    <a href="index.html" data-i18n="home">Uma</a>
+    <a href="aprende.html" data-i18n="learn">Aprende</a>
+    <a href="kontaktu.html" data-i18n="contact">Kontaktu</a>
+    <select id="langSwitcher" style="margin-left:10px;padding:3px;border-radius:4px;">
+      <option value="tet">Tetun</option>
+      <option value="id">Bahasa Indonesia</option>
+      <option value="en">English</option>
+    </select>
+  </nav>
+</header>
+
+<section class="hero">
+  <h1 id="heroTitle">Bemvindu mai MAITANDE</h1>
+  <p id="heroDesc"> Plataforma online ne'ebe hanorin ita konaba buat barak. </p>
+</section>
+
+<section class="section">
+  <h2 data-i18n="learnTitle">Maitande (Mai Ita Aprende)</h2>
+  <div class="cards">
+    <div class="card">
+      <h3 data-i18n="catLang"> Informasaun kompletu liu</h3>
+      <p data-i18n="catLangDesc"> Maitande sei oferese artikulu artikulu ho informasaun neebe kompletu, Justu no klaru liu.</p>
+    </div>
+    <div class="card">
+      <h3 data-i18n="catHistory"> Lian Oi-Oin</h3>
+      <p data-i18n="catHistoryDesc"> Maitande sei oferese lingua seluk hanesan bahasa indonesia no ingles atu ajuda ema seluk bele komprende.</p>
+    </div>
+    <div class="card">
+      <h3 data-i18n="catEdu">Edukasaun Geral</h3>
+      <p data-i18n="catEduDesc">Maitande mos sei oferese artikulu konaba edukasaun geral ne'ebe dala barak timor oan sira buka.</p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p id="footerText">© 2025 MAITANDE – Timor-Leste</p>
+</footer>
+
+<script>
+  const content = {
+    tet: { home:'Uma', learn:'Aprende ', contact:'Kontaktu', learnTitle:'Aprende', catLang:'Informasaun kompletu liu', catLangDesc:'Maitande sei oferese artikulu artikulu ho informasaun neebe kompletu, Justu no klaru liu.', catHistory:'Lian oi-oin', catHistoryDesc:'Maitande sei oferes lingua seluk hanesan bahasa indonesia no ingles atu ajuda ema seluk bele komprende.', catEdu:'Edukasaun Geral', catEduDesc:'Maitande mos sei oferese artikulu konaba edukasaun geral neebe dala barak timor oan sira buka.', heroTitle:'Bemvindu mai MAITANDE', heroDesc:'Plataforma online neebe hanorin ita konaba buat barak.', footer:'© 2025 MAITANDE – Timor-Leste' },
+    id: { home:'Beranda', learn:'Belajar ', contact:'Kontak', learnTitle:'Belajar ', catLang:'Informasi lebih lengkap', catLangDesc:'Maitande akan menghadirkan artikel artikel dengan informasi yang lengkap dan nyata.', catHistory:'Berbagai bahasa', catHistoryDesc:'Maitande akan menghadirkan bahasa lainnya seperti tetun dan english agar membantu orang lain.', catEdu:'Edukasi Umum', catEduDesc:'Maitande juga akan menghadirkan artikel tentang edukasi umum yang sering dicari anak timor.', heroTitle:'Selamat Datang di MAITANDE', heroDesc:'Platform online yang mengajarkan kita tentang banyak hal.', footer:'© 2025 MAITANDE – Timor-Leste' },
+    en: { home:'Home', learn:'Learn ', contact:'Contact', learnTitle:'Learn ', catLang:'More detailed information', catLangDesc:'Maitande will present articles with complete and accurate information.', catHistory:'Various languages', catHistoryDesc:'Maitande will present other languages such as Tetum and bahasa indonesia to help others.', catEdu:'General Education', catEduDesc:'Maitande will also present articles about general education that are often searched for by Timorense children.', heroTitle:'Welcome to MAITANDE', heroDesc:'An online platform that teaches us about many things.', footer:'© 2025 MAITANDE – Timor-Leste ' }
+  };
+
+  const switcher = document.getElementById('langSwitcher');
+  switcher.addEventListener('change', () => {
+    const lang = switcher.value;
+    document.querySelectorAll('[data-i18n]').forEach(el => el.textContent = content[lang][el.dataset.i18n]);
+    document.getElementById('heroTitle').textContent = content[lang].heroTitle;
+    document.getElementById('heroDesc').textContent = content[lang].heroDesc;
+    document.getElementById('footerText').textContent = content[lang].footer;
+  });
+</script>
+
+</body>
+</html>

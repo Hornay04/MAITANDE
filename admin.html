@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin MAITANDE – Kontrol Artikel</title>
+  <style>
+    body{ margin:0; font-family:Arial, Helvetica, sans-serif; background:#f4f6f8; }
+    .login, .admin{ max-width:900px; margin:60px auto; background:#fff; padding:30px; border-radius:12px; box-shadow:0 6px 20px rgba(0,0,0,0.1); }
+    h1{ margin-bottom:20px; }
+    input, select, button{ width:100%; padding:12px; margin-bottom:15px; border-radius:8px; border:1px solid #ccc; font-size:14px; }
+    button{ background:#0a3d62; color:#fff; border:none; cursor:pointer; font-weight:bold; }
+    button:hover{ opacity:0.9; }
+    .hidden{ display:none; }
+    table{ width:100%; border-collapse:collapse; margin-top:20px; }
+    th, td{ border:1px solid #ccc; padding:10px; text-align:left; }
+    th{ background:#0a3d62; color:#fff; }
+    .action-btn{ padding:5px 10px; border:none; border-radius:6px; cursor:pointer; color:#fff; }
+    .delete-btn{ background:#e74c3c; }
+    .form-group{ margin-bottom:15px; }
+    label{ font-weight:bold; display:block; margin-bottom:5px; }
+    /* Editor like Word */
+    #editorToolbar{ display:flex; gap:10px; margin-bottom:10px; flex-wrap:wrap; }
+    #editorToolbar button{ padding:5px 10px; font-size:14px; }
+    #editorContent{ width:100%; height:300px; border:1px solid #ccc; border-radius:8px; padding:10px; overflow:auto; }
+  </style>
+</head>
+<body>
+
+<div class="login" id="loginBox">
+  <h1>Login Admin MAITANDE</h1>
+  <input type="password" id="password" placeholder="Password admin" />
+  <button onclick="login()">Masuk</button>
+</div>
+
+<div class="admin hidden" id="adminBox">
+  <h1>Kontrol Artikel</h1>
+
+  <div class="form-group">
+    <label for="title">Judul Artikel</label>
+    <input type="text" id="title" placeholder="Judul Artikel" />
+  </div>
+
+  <div class="form-group">
+    <label for="language">Bahasa</label>
+    <select id="language">
+      <option value="tet">Tetun</option>
+      <option value="id">Indonesia</option>
+      <option value="en">English</option>
+    </select>
+  </div>
+
+  <div class="form-group">
+    <label for="category">Kategori</label>
+    <select id="category">
+      <!-- Kategori akan terisi berdasarkan bahasa -->
+    </select>
+  </div>
+
+  <div class="form-group">
+    <label>Isi Artikel (HTML)</label>
+    <div id="editorToolbar">
+      <button type="button" onclick="execCmd('bold')"><b>B</b></button>
+      <button type="button" onclick="execCmd('italic')"><i>I</i></button>
+      <button type="button" onclick="execCmd('underline')"><u>U</u></button>
+      <button type="button" onclick="execCmd('foreColor', prompt('Masukkan warna (contoh red, #ff0000):'))">Warna</button>
+      <button type="button" onclick="execCmd('fontSize', prompt('Masukkan ukuran 1-7:'))">Ukuran</button>
+      <button type="button" onclick="insertImage()">Tambah Gambar</button>
+    </div>
+    <div id="editorContent" contenteditable="true"></div>
+  </div>
+
+  <button onclick="saveArticle()">Simpan Artikel</button>
+  <p id="status"></p>
+
+  <h2>Daftar Artikel</h2>
+  <table id="articlesTable">
+    <thead>
+      <tr><th>Judul</th><th>Bahasa</th><th>Kategori</th><th>Tanggal</th><th>Aksi</th></tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+</div>
+
+<script>
+const ADMIN_PASSWORD = 'maitande123';
+
+const categoriesByLanguage = {
+  tet: ['Bahasa & Komunikasi','Sejarah & Budaya','Edukasi Umum','Teknologi','Kimia','Matematika','Biologi','Ekonomi','Fisika','Geografi','Sosiologi','Antropologi','Politik','Hukum','Kesehatan','Lingkungan','Pertanian','Perikanan','Sejarah Lokal','Budaya Lokal','Agama','Filsafat','Literasi Digital','Kewirausahaan','Keuangan','Statistika','Informatika','Teknik','Pendidikan','Lainnya'],
+  id: ['Bahasa & Komunikasi','Sejarah & Budaya','Edukasi Umum','Teknologi','Kimia','Matematika','Biologi','Ekonomi','Fisika','Geografi','Sosiologi','Antropologi','Politik','Hukum','Kesehatan','Lingkungan','Pertanian','Perikanan','Sejarah Lokal','Budaya Lokal','Agama','Filsafat','Literasi Digital','Kewirausahaan','Keuangan','Statistika','Informatika','Teknik','Pendidikan','Lainnya'],
+  en: ['Language & Communication','History & Culture','General Education','Technology','Chemistry','Mathematics','Biology','Economics','Physics','Geography','Sociology','Anthropology','Politics','Law','Health','Environment','Agriculture','Fisheries','Local History','Local Culture','Religion','Philosophy','Digital Literacy','Entrepreneurship','Finance','Statistics','Informatics','Engineering','Education','Others']
+};
+
+function login(){
+  const pass = document.getElementById('password').value;
+  if(pass === ADMIN_PASSWORD){
+    document.getElementById('loginBox').classList.add('hidden');
+    document.getElementById('adminBox').classList.remove('hidden');
+    populateCategories();
+    renderTable();
+  } else { alert('Password salah'); }
+}
+
+function populateCategories(){
+  const lang = document.getElementById('language').value;
+  const categorySelect = document.getElementById('category');
+  categorySelect.innerHTML = '';
+  categoriesByLanguage[lang].forEach(cat => {
+    const opt = document.createElement('option');
+    opt.value = cat;
+    opt.textContent = cat;
+    categorySelect.appendChild(opt);
+  });
+}
+
+document.getElementById('language').addEventListener('change', populateCategories);
+
+function execCmd(command, value=null){
+  document.execCommand(command, false, value);
+}
+
+function insertImage(){
+  const url = prompt('Masukkan URL gambar:');
+  if(url) document.execCommand('insertImage', false, url);
+}
+
+function saveArticle(){
+  const article = {
+    id: Date.now(),
+    title: document.getElementById('title').value,
+    language: document.getElementById('language').value,
+    category: document.getElementById('category').value,
+    content: document.getElementById('editorContent').innerHTML,
+    date: new Date().toLocaleString()
+  };
+  let articles = JSON.parse(localStorage.getItem('maitande_articles')) || [];
+  articles.push(article);
+  localStorage.setItem('maitande_articles', JSON.stringify(articles));
+  document.getElementById('status').innerText = 'Artikel berhasil disimpan.';
+  document.getElementById('title').value = '';
+  document.getElementById('editorContent').innerHTML = '';
+  renderTable();
+}
+
+function deleteArticle(id){
+  let articles = JSON.parse(localStorage.getItem('maitande_articles')) || [];
+  articles = articles.filter(a => a.id !== id);
+  localStorage.setItem('maitande_articles', JSON.stringify(articles));
+  renderTable();
+}
+
+function renderTable(){
+  let articles = JSON.parse(localStorage.getItem('maitande_articles')) || [];
+  const tbody = document.querySelector('#articlesTable tbody');
+  tbody.innerHTML = '';
+  articles.forEach(a=>{
+    const tr = document.createElement('tr');
+    tr.innerHTML = `<td>${a.title}</td><td>${a.language}</td><td>${a.category}</td><td>${a.date}</td>
+                    <td><button class='action-btn delete-btn' onclick='deleteArticle(${a.id})'>Hapus</button></td>`;
+    tbody.appendChild(tr);
+  });
+}
+</script>
+
+</body>
+</html>
